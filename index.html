@@ -3,110 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Message from LOL for Smiddy</title>
+    <title>A Message for Smiddy ❤️</title>
     <style>
-        /* Warm & Welcoming Styling */
-        body, html {
+        /* Warm & Welcoming Background */
+        body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #fff5f5; /* Soft pink/warm background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
+            color: #4a4a4a;
             text-align: center;
-            color: white;
-            padding: 20px;
         }
 
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { font-size: 1.2rem; margin-bottom: 30px; }
-
-        .play-btn {
-            background-color: white;
-            color: #ff6b6b;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease;
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 90%;
+            width: 600px;
         }
 
-        .play-btn:hover { transform: scale(1.1); }
+        h1 { margin-bottom: 10px; color: #d63384; }
+        p { font-size: 1.1rem; margin-bottom: 25px; }
 
-        #video-container {
-            width: 100vw;
-            height: 100vh;
-            display: none; /* Hidden until button is clicked */
-            background: black;
+        /* Video Styling */
+        .video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            line-height: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         video {
             width: 100%;
-            height: 100%;
-            object-fit: contain; /* Keeps video aspect ratio */
+            display: block;
         }
+
+        /* Interaction Overlay (to enable sound) */
+        #play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .play-button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .play-button:hover { transform: scale(1.1); }
+
+        /* Replay Button */
+        #replay-btn {
+            margin-top: 20px;
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Hidden until video ends */
+            font-weight: bold;
+        }
+
+        #replay-btn:hover { background-color: #b82b6f; }
     </style>
 </head>
 <body>
 
-    <!-- Landing Page: The "Gesture" -->
-    <div id="overlay">
+    <div class="card">
         <h1>Hi Smiddy! ❤️</h1>
-        <p>The Lab of Learning (LOL) has a surprise for you.</p>
-        <button class="play-btn" onclick="startSurprise()">Open your message</button>
-    </div>
+        <p>A warm gesture from the Lab of Learning (LOL)</p>
 
-    <!-- The Video Player -->
-    <div id="video-container">
-        <video id="wishVideo" playsinline>
-            <source src="img/beterschap.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <div class="video-container">
+            <!-- Overlay to start video with sound -->
+            <div id="play-overlay" onclick="startVideo()">
+                <button class="play-button">▶ Open Message</button>
+            </div>
+
+            <!-- Video element -->
+            <video id="wishVideo" playsinline>
+                <source src="img/beterschap.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <button id="replay-btn" onclick="startVideo()">Watch Again</button>
     </div>
 
     <script>
-        function startSurprise() {
-            const overlay = document.getElementById('overlay');
-            const container = document.getElementById('video-container');
-            const video = document.getElementById('wishVideo');
+        const video = document.getElementById('wishVideo');
+        const overlay = document.getElementById('play-overlay');
+        const replayBtn = document.getElementById('replay-btn');
 
-            // 1. Hide the greeting card
+        function startVideo() {
+            // Hide overlay and replay button
             overlay.style.display = 'none';
+            replayBtn.style.display = 'none';
             
-            // 2. Show the video container
-            container.style.display = 'block';
-
-            // 3. Play the video with sound!
-            // 'playsinline' is crucial for iPhones to keep it in the browser
-            video.muted = false; 
-            video.play().catch(error => {
-                console.log("Autoplay failed, but user interaction should have fixed this.");
-            });
-            
-            // Optional: Go fullscreen (uncomment below if you want)
-            // if (video.requestFullscreen) video.requestFullscreen();
+            // Play video with sound
+            video.currentTime = 0;
+            video.play();
         }
+
+        // Show the replay button when the video finishes
+        video.onended = function() {
+            replayBtn.style.display = 'inline-block';
+        };
     </script>
+
 </body>
 </html>
